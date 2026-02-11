@@ -22,10 +22,23 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
-// Convert the RequestType enum to its array form i.e, [0,1,2,3...]
-const requestTypes: RequestType[] = Object.values(RequestType).filter(
-  (value) => typeof value === 'number',
-) as RequestType[]
+// String definitions of RequestType enums, this is used for labeling the Select element
+const requestTypeLabels = [
+  'Hardware Repairs and Configuration',
+  'Network or Internet Services',
+  'Data Services',
+  'System Services',
+  'Request for System Development',
+  'Others',
+]
+
+// Convert the RequestType enum to its JSON or dict like counter-part i.e., { "key": value }
+const requestTypeOptions = Object.values(RequestType)
+  .filter((v): v is number => typeof v === 'number')
+  .map((value) => ({
+    label: requestTypeLabels[value],
+    value,
+  }))
 
 const formSchema = z.object({
   name: z.string(),
@@ -37,11 +50,7 @@ const formSchema = z.object({
 
 const form = useForm({
   defaultValues: {
-    name: '',
-    email: '',
-    office: '',
     request_type: RequestType.hardware_repairs_and_configuration,
-    details: '',
   },
   validators: {
     onSubmit: formSchema,
@@ -92,7 +101,7 @@ function isInvalid(field: any) {
               :name="field.name"
               :model-value="field.state.value"
               :aria-invalid="isInvalid(field)"
-              placeholder="John Doe"
+              placeholder="johndoe@email.com"
               @blur="field.handleBlur"
               @input="field.handleChange($event.target.value)"
             />
@@ -112,7 +121,7 @@ function isInvalid(field: any) {
               :name="field.name"
               :model-value="field.state.value"
               :aria-invalid="isInvalid(field)"
-              placeholder="John Doe"
+              placeholder="John Doe's Office"
               @blur="field.handleBlur"
               @input="field.handleChange($event.target.value)"
             />
@@ -136,8 +145,12 @@ function isInvalid(field: any) {
                 <SelectValue placeholder="Select the type of request" />
               </SelectTrigger>
               <SelectContent position="item-aligned">
-                <SelectItem v-for="type in requestTypes" :key="type" :value="type">
-                  {{ RequestType[type] }}
+                <SelectItem
+                  v-for="type in requestTypeOptions"
+                  :key="type.value"
+                  :value="type.value"
+                >
+                  {{ type.label }}
                 </SelectItem>
               </SelectContent>
             </Select>
