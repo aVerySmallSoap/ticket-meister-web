@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import { Toaster } from 'vue-sonner'
 </script>
 
 <template>
-    <RouterView />
+  <RouterView />
+  <Toaster
+    :position="'top-right'"
+    :duration="2000"
+    rich-colors
+  />
 </template>
 
 <style scoped>

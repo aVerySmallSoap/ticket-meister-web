@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import TicketTable from "@/components/TicketTable.vue";
+import Dashtest from "@/components/Dashtest.vue";
 </script>
 
 <template>
-  This is a test webpage <br/>
-  <suspense>
-    <template #default>
-      <TicketTable/>
-    </template>
-    <template #fallback>
-      loading...
-    </template>
-  </suspense>
+      <Dashtest/>
 </template>
 
 <style scoped>

@@ -4,17 +4,30 @@ export interface Ticket {
     office: string,
     details: string | null,
     priority: number,
-    request_type: number,
+    request_type: RequestType,
     date: string,
     id: string,
     personnel: string | null
 }
 
+export interface Personnel {
+  id: string,
+  name: string,
+}
+
 export enum RequestType {
-  hardware_repairs_and_configuration,
-  network_or_internet_services,
-  data_services,
-  system_services,
-  request_for_system_development,
-  others,
+  "Hardware Repairs and Configuration",
+  "Network or Internet Services",
+  "Data Services",
+  "System Services",
+  "Request for System Services",
+  "Others",
+}
+
+export enum Priorities {
+  None,
+  Low,
+  Medium,
+  High,
+  Highest
 }
