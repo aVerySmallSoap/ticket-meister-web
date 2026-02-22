@@ -11,7 +11,7 @@ const ticketEntries = (t: Ticket) =>
 </script>
 
 <template>
-  <div v-for="item in tickets">
+  <div v-for="item in tickets" :key="item.id">
     <div v-for="[k, v] of ticketEntries(item)" :key="k">
       <!-- We can assume that v is a number here since we type hint it as of type Ticket-->
       <div v-if="k === 'priority'">

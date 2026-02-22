@@ -5,7 +5,6 @@ import { z } from 'zod'
 import {
   Field,
   FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -44,19 +43,18 @@ const formSchema = z.object({
   name: z.string('Name is required!'),
   email: z.email('Email is required!'),
   office: z.string('Office is required!'),
-  request_type: z.enum(RequestType),
-  details: z.string().optional(),
+  request_type: z.enum(RequestType, 'Please select a request type!'),
+  details: z.string('Please describe your problem'),
 })
 
 const form = useForm({
   defaultValues: {
-    request_type: RequestType.hardware_repairs_and_configuration,
+    request_type: RequestType['Hardware Repairs and Configuration'],
   },
   validators: {
     onSubmit: formSchema,
   },
   onSubmit: async ({ value }) => {
-    console.log(typeof value)
     fetch(`http://localhost:8000/tickets`, {
       method: 'POST',
       body: JSON.stringify(value),

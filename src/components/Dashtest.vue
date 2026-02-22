@@ -12,8 +12,7 @@ async function fetchTickets() {
   return formatTickets(tickets)
 }
 
-function formatTickets(tickets: any) {
-  let formattedTickets: Ticket[] = []
+function formatTickets(tickets: object) {
   const format_options = {
     year: 'numeric',
     month: 'short',
@@ -22,15 +21,17 @@ function formatTickets(tickets: any) {
     minute: 'numeric',
     second: 'numeric',
   }
-  formattedTickets = (tickets as any[]).map((t) => ({
+  return (tickets as any[]).map((t) => ({
     ...t,
     date: new Date(t.date).toLocaleDateString('en-US', format_options),
     priority: Priorities[t.priority],
     request_type: RequestType[t.request_type],
-    personnel: t.personnel ? t.personnel : "None",
+    personnel: t.personnel ? t.personnel : 'None',
   })) as Ticket[]
+}
 
-  return formattedTickets
+function testEmit(n: Ticket[]) {
+  console.log(typeof n)
 }
 
 onMounted(async () => {
@@ -39,7 +40,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <TicketTable :columns="ticket_columns" :data="data" />
+  <TicketTable :columns="ticket_columns" :data="data" @update:mark-all="(n) => testEmit(n)"/>
 </template>
 
 <style scoped></style>
