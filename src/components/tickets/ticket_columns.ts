@@ -2,7 +2,7 @@ import { h } from 'vue';
 import type { Ticket } from '@/types/types.ts'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { toast } from 'vue-sonner'
-import TicketDropdownAction from '@/components/tickets/TicketDropdownAction.vue'
+import TicketQuickActions from '@/components/tickets/ticket-quick-actions.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
 
@@ -80,7 +80,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     header: () => h('div', { class: 'text-center' }, 'Actions'),
     cell: ({ row }) => {
       const ticket: Ticket = row.original
-      return h('div', { class: 'relative' }, h(TicketDropdownAction, { ticket }))
+      return h('div', { class: 'relative' }, h(TicketQuickActions, { ticket }))
     },
   },
 ]

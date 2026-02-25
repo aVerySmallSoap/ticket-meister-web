@@ -80,7 +80,7 @@ function isInvalid(field: any) {
         <Label>Problem details:</Label>
         <Label>{{ props.ticket.details }}</Label>
       </div>
-      <form id="form-edit-ticket" @submit="form.handleSubmit">
+      <form id="form-edit-ticket" @submit.prevent="form.handleSubmit">
         <FieldGroup>
           <form.Field name="priority">
             <template #default="{ field }">
