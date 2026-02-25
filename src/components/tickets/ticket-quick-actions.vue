@@ -13,6 +13,7 @@ const props = defineProps<{
 
 function copy() {
   navigator.clipboard.writeText(props.ticket.id)
+  toast.success('Ticket ID copied to clipboard')
 }
 
 function applyEdit(priority: number) {
