@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { PlusCircle, X, Check } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -13,28 +13,26 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Personnel } from '@/types/types.ts'
+import { type Personnel } from '@/types/types.ts'
+import { fetchPersonnel } from '@/scripts/api.ts'
+
+const props = defineProps<{
+  modelValue?: string[]
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string[]): void
+}>()
 
 // make this reactive later
 const personnelList = ref<Personnel[]>([])
 
-async function fetchPersonnels() {
-  const response = await fetch(`http://localhost:8000/personnel/?offset=0&limit=100`)
-  return await response.json()
-}
-
-// const personnelList: Personnel[] = [
-//   { id: 1, name: 'Romel Cadungon',  role: 'IT Technician',    avatar: 'RC' },
-//   { id: 2, name: 'Angelo Mariano',  role: 'Systems Admin',    avatar: 'AM' },
-//   { id: 3, name: 'Sofia Reyes',     role: 'Network Engineer', avatar: 'SR' },
-//   { id: 4, name: 'Mark Dela Cruz',  role: 'Help Desk',        avatar: 'MD' },
-//   { id: 5, name: 'Lena Santos',     role: 'IT Technician',    avatar: 'LS' },
-//   { id: 6, name: 'Carlo Bautista',  role: 'Systems Admin',    avatar: 'CB' },
-//   { id: 7, name: 'Rina Villanueva', role: 'Security Analyst', avatar: 'RV' },
-//   { id: 8, name: 'James Ong',       role: 'Help Desk',        avatar: 'JO' },
-// ]
-
 const selected = ref<Personnel[]>([])
+const selectedIDs = computed(() => selected.value.map(p => String(p.id)))
+
+watch(selectedIDs, (ids) => {
+  emit('update:modelValue', ids)
+})
 
 function isSelected(person: Personnel) {
   return selected.value.some((p) => p.id === person.id)
@@ -57,7 +55,9 @@ function clearAll() {
 }
 
 onMounted(async () => {
-  personnelList.value = await fetchPersonnels()
+  personnelList.value = await fetchPersonnel()
+  const ids = props.modelValue ?? []
+  selected.value = personnelList.value.filter(p => ids.includes(p.id))
 })
 </script>
 

@@ -18,12 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { invertPriorityFromString } from '@/scripts/utils.ts'
+import { ref } from 'vue'
+import { invertPriorityFromString, personnelToArray } from '@/scripts/utils.ts'
 import PersonnelFilterDemo from '@/components/personnel/PersonnelFilterDemo.vue'
 import { Button } from '@/components/ui/button'
 
 const emit = defineEmits(['save', 'cancel'])
 
+const isOpen = ref(false)
 const props = defineProps<{
   ticket: Ticket
 }>()
@@ -39,17 +41,20 @@ const priorityTypeOptions = Object.values(Priorities)
 
 const formSchema = z.object({
   priority: z.number(),
+  personnel: z.array(z.uuidv4()),
 })
 
 const form = useForm({
   defaultValues: {
     priority: invertPriorityFromString(props.ticket.priority),
+    personnel: personnelToArray(props.ticket.personnel),
   },
   validators: {
     onSubmit: formSchema,
   },
   onSubmit: async ({ value }) => {
-    emit('save', value.priority)
+    emit('save', value)
+    isOpen.value = false
   },
 })
 
@@ -59,11 +64,11 @@ function isInvalid(field: any) {
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="isOpen">
     <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
-    <DialogContent>
+    <DialogContent id="dialog-edit-ticket">
       <DialogTitle> Edit Ticket </DialogTitle>
       <DialogDescription>{{ props.ticket.id }}</DialogDescription>
       <div>
@@ -110,7 +115,14 @@ function isInvalid(field: any) {
               </Field>
             </template>
           </form.Field>
-          <PersonnelFilterDemo/>
+          <form.Field name="personnel">
+            <template #default="{ field }">
+              <PersonnelFilterDemo
+                :model-value="field.state.value"
+                @update:model-value="field.handleChange"
+              />
+            </template>
+          </form.Field>
         </FieldGroup>
         <Button type="submit">Save</Button>
       </form>

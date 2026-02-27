@@ -10,8 +10,10 @@ const props = defineProps<{
   data: TData[]
 }>()
 
-// define emits
-defineEmits(['update:mark-all'])
+const emit = defineEmits<{
+  (e: 'row-action', payload: { type: string; row: TData[]}): void
+  (e: 'refresh'): void
+}>()
 
 const rowSelection = ref({})
 
@@ -26,23 +28,16 @@ const table = useVueTable({
   onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
   state: {
     get rowSelection() {return rowSelection.value}
+  },
+  meta: {
+    emitRowAction: (payload: { type: string; row: TData }) => emit('row-action', payload),
+    requestRefresh: () => emit('refresh'),
   }
 })
-
-function getAssociatedData(): TData[] {
-  const toBeUpdated: TData[] = []
-  for (const row in rowSelection.value) {
-    toBeUpdated.push(props.data[row])
-  }
-  return toBeUpdated
-}
 
 </script>
 
 <template>
-  <Button @click="$emit('update:mark-all', getAssociatedData())">Update
-    Mark all as test
-  </Button>
   <Table>
     <TableHeader>
       <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -63,7 +58,7 @@ function getAssociatedData(): TData[] {
           :data-state="row.getIsSelected() ? 'selected' : undefined"
         >
           <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()"/>
           </TableCell>
         </TableRow>
       </template>

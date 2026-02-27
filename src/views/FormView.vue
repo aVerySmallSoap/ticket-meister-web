@@ -65,6 +65,7 @@ const form = useForm({
       console.log(response.json())
       if (response.ok) {
         toast.success('form submitted')
+        form.reset()
       }
     })
   },

@@ -3,9 +3,13 @@ import { ButtonGroup } from '@/components/ui/button-group'
 import { Button } from '@/components/ui/button'
 import { CopyIcon, SquarePenIcon } from 'lucide-vue-next'
 import type { Ticket } from '@/types/types.ts'
-import { invertRequestType } from '@/scripts/utils.ts'
 import { toast } from 'vue-sonner'
 import TicketEditCard from '@/components/tickets/TicketEditCard.vue'
+import { applyTicketEdits } from '@/scripts/api.ts'
+
+defineEmits<{
+  (e: 'updated'): void
+}>()
 
 const props = defineProps<{
   ticket: Ticket
@@ -16,24 +20,6 @@ function copy() {
   toast.success('Ticket ID copied to clipboard')
 }
 
-function applyEdit(priority: number) {
-  const copy: Ticket = props.ticket
-  copy.priority = priority
-  copy.request_type = invertRequestType(copy.request_type)
-  console.log(copy)
-  fetch(`http://localhost:8000/tickets/${copy.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(copy),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).then((response) => {
-    console.log(response.json())
-    if (response.ok) {
-      toast.success('Ticket updated successfully.')
-    }
-  })
-}
 </script>
 
 <template>
@@ -41,7 +27,10 @@ function applyEdit(priority: number) {
     <Button variant="outline" size="icon-sm" @click="copy">
       <CopyIcon />
     </Button>
-    <TicketEditCard :ticket="props.ticket" @save="applyEdit">
+    <TicketEditCard :ticket="props.ticket" @save="(n) => {
+      applyTicketEdits(props.ticket, n)
+      $emit('updated')
+    }">
       <Button variant="outline" size="icon-sm">
         <SquarePenIcon />
       </Button>

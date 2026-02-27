@@ -5,6 +5,7 @@ import { toast } from 'vue-sonner'
 import TicketQuickActions from '@/components/tickets/ticket-quick-actions.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
+import PersonnelBadges from '@/components/tickets/composable/personnel-badges.vue'
 
 export const ticket_columns: ColumnDef<Ticket>[] = [
   {
@@ -62,7 +63,12 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
   {
     accessorKey: 'personnel',
     header: () => h('div', { class: 'text-left' }, 'Personnel'),
-    cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('personnel')),
+    cell: ({ row }) => {
+      const personnel = row.getValue('personnel')
+      return h('div', { class: 'text-center'},
+        h(PersonnelBadges, { personnel })
+      )
+    },
   },
   {
     accessorKey: 'name',
@@ -78,9 +84,15 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     id: 'actions',
     enableHiding: false,
     header: () => h('div', { class: 'text-center' }, 'Actions'),
-    cell: ({ row }) => {
-      const ticket: Ticket = row.original
-      return h('div', { class: 'relative' }, h(TicketQuickActions, { ticket }))
+    cell: ({ row, table }) => {
+      return h('div', { class: 'relative' },
+        h(TicketQuickActions, {
+          ticket: row.original,
+          onUpdated: () => {
+            table.options.meta?.requestRefresh?.()
+            table.options.meta?.emitRowAction?.({ type: 'updated', row: row.original})
+          }
+        }))
     },
   },
 ]
