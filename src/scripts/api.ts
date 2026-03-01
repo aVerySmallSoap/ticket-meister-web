@@ -1,12 +1,30 @@
 // This file should contain functions related to API calls on the backend
 
 import type { Ticket } from '@/types/types.ts'
-import { invertRequestType, stringifyPersonnel } from '@/scripts/utils.ts'
+import { invertRequestType, personnelToArray, stringifyPersonnel } from '@/scripts/utils.ts'
 import { toast } from 'vue-sonner'
+import { PersonnelList } from '@/types/types.ts'
 
 export async function fetchPersonnel() {
   const response = await fetch(`http://localhost:8000/personnel/?offset=0&limit=100`)
   return await response.json()
+}
+
+export async function fetchPersonnelList(list: string){
+  if (!(list == null || list.length == 0 || list == 'None')){
+    const personnel: PersonnelList = {
+      ids: personnelToArray(list),
+    }
+    const test = await fetch(`http://localhost:8000/personnel/list`, {
+      method: 'POST',
+      body: JSON.stringify(personnel),
+      headers: {
+        "Content-Type": 'application/json',
+      },
+    })
+    return await test.json()
+  }
+  return []
 }
 
 // Calls with POST and PUT methods must accept either an object or any type.

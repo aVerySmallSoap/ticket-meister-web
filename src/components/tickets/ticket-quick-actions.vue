@@ -7,7 +7,7 @@ import { toast } from 'vue-sonner'
 import TicketEditCard from '@/components/tickets/TicketEditCard.vue'
 import { applyTicketEdits } from '@/scripts/api.ts'
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'updated'): void
 }>()
 
@@ -20,6 +20,10 @@ function copy() {
   toast.success('Ticket ID copied to clipboard')
 }
 
+async function onSave(n: any) {
+  await applyTicketEdits(props.ticket, n)
+  emit('updated')
+}
 </script>
 
 <template>
@@ -27,15 +31,11 @@ function copy() {
     <Button variant="outline" size="icon-sm" @click="copy">
       <CopyIcon />
     </Button>
-    <TicketEditCard :ticket="props.ticket" @save="(n) => {
-      applyTicketEdits(props.ticket, n)
-      $emit('updated')
-    }">
+
+    <TicketEditCard :ticket="ticket" @save="onSave">
       <Button variant="outline" size="icon-sm">
         <SquarePenIcon />
       </Button>
     </TicketEditCard>
   </ButtonGroup>
 </template>
-
-<style scoped></style>

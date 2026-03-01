@@ -31,7 +31,7 @@ const table = useVueTable({
   },
   meta: {
     emitRowAction: (payload: { type: string; row: TData }) => emit('row-action', payload),
-    requestRefresh: () => emit('refresh'),
+    requestRefresh: () => emit('refresh',),
   }
 })
 

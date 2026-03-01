@@ -44,17 +44,17 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: 'date',
-    header: () => h('div', { class: 'text-left' }, 'Date'),
+    header: () => h('div', { class: 'text-center' }, 'Date'),
     cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('date')),
   },
   {
     accessorKey: 'request_type',
-    header: () => h('div', { class: 'text-left' }, 'Request Type'),
+    header: () => h('div', { class: 'text-center' }, 'Request Type'),
     cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('request_type')),
   },
   {
     accessorKey: 'priority',
-    header: () => h('div', { class: 'text-left' }, 'Priority'),
+    header: () => h('div', { class: 'text-center' }, 'Priority'),
     cell: ({ row }) => {
       const priority = row.getValue('priority')
       return h('div', { class: 'text-center' }, h(PriorityBadges, { priority }));
@@ -62,7 +62,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: 'personnel',
-    header: () => h('div', { class: 'text-left' }, 'Personnel'),
+    header: () => h('div', { class: 'text-center' }, 'Personnel'),
     cell: ({ row }) => {
       const personnel = row.getValue('personnel')
       return h('div', { class: 'text-center'},
@@ -72,12 +72,12 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: 'name',
-    header: () => h('div', { class: 'text-left' }, 'Name'),
+    header: () => h('div', { class: 'text-center' }, 'Name'),
     cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('name')),
   },
   {
     accessorKey: 'email',
-    header: () => h('div', { class: 'text-left' }, 'Email'),
+    header: () => h('div', { class: 'text-center' }, 'Email'),
     cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('email')),
   },
   {

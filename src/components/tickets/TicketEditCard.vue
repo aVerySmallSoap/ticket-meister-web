@@ -85,7 +85,7 @@ function isInvalid(field: any) {
         <Label>Problem details:</Label>
         <Label>{{ props.ticket.details }}</Label>
       </div>
-      <form id="form-edit-ticket" @submit.prevent="form.handleSubmit">
+      <form id="form-edit-ticket" @submit.prevent="form.handleSubmit" class="grid gap-4">
         <FieldGroup>
           <form.Field name="priority">
             <template #default="{ field }">
@@ -115,6 +115,8 @@ function isInvalid(field: any) {
               </Field>
             </template>
           </form.Field>
+        </FieldGroup>
+        <FieldGroup>
           <form.Field name="personnel">
             <template #default="{ field }">
               <PersonnelFilterDemo
@@ -124,7 +126,9 @@ function isInvalid(field: any) {
             </template>
           </form.Field>
         </FieldGroup>
-        <Button type="submit">Save</Button>
+        <div class="">
+          <Button type="submit">Save</Button>
+        </div>
       </form>
     </DialogContent>
   </Dialog>

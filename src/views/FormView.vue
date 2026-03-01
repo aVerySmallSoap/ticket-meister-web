@@ -29,6 +29,7 @@ const requestTypeLabels = [
   'System Services',
   'Request for System Development',
   'Others',
+  'Equipment Repair Report'
 ]
 
 // Convert the RequestType enum to its JSON or dict like counter-part i.e., { "key": value }

@@ -15,6 +15,10 @@ export interface Personnel {
   name: string,
 }
 
+export class PersonnelList {
+  ids: string[]
+}
+
 export enum RequestType {
   "Hardware Repairs and Configuration",
   "Network or Internet Services",
@@ -22,6 +26,7 @@ export enum RequestType {
   "System Services",
   "Request for System Services",
   "Others",
+  "Equipment Repair Report"
 }
 
 export enum Priorities {

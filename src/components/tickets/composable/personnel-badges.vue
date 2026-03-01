@@ -1,30 +1,42 @@
 <script setup lang="ts">
-
-// personnel is defined as a string for now since sqlite does not support arrays.
-// Once the database is migrated to MariaDB, if it allows arrays, this should be string[].
 import { Badge } from '@/components/ui/badge'
-import { personnelToArray } from '@/scripts/utils.ts'
+import { onMounted, ref, watch } from 'vue'
+import { fetchPersonnelList } from '@/scripts/api.ts'
+
+type Technician = {
+  id: string
+  name: string
+}
 
 const props = defineProps<{
   personnel: string
 }>()
-const personnel = personnelToArray(props.personnel)
 
-if (!(props.personnel == null || props.personnel.length == 0 || props.personnel == 'None')){
-  const test = await fetch(`http://localhost:8000/personnel/${personnel}`)
-  const items = await test.json()
-  console.log("its not empty!", items)
+// Always initialize as an array so v-for can render immediately (even if empty)
+const personnelList = ref<Technician[]>([])
+
+async function load() {
+  personnelList.value = await fetchPersonnelList(props.personnel)
 }
 
+onMounted(load)
+
+// If the table row changes and this component is reused, keep it in sync
+watch(() => props.personnel, load)
 </script>
 
 <template>
-  <Badge
-    v-for="technician in props.personnel"
-    :key="technician"
-    variant="secondary">
+  <div class="flex flex-wrap justify-center gap-1">
+    <template v-if="personnelList.length">
+      <Badge
+        v-for="technician in personnelList"
+        :key="technician.id"
+        variant="secondary"
+      >
+        {{ technician.name }}
+      </Badge>
+    </template>
 
-  </Badge>
+    <span v-else class="text-xs text-muted-foreground">None</span>
+  </div>
 </template>
-
-<style scoped></style>
