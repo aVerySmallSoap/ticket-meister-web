@@ -57,7 +57,11 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     header: () => h('div', { class: 'text-center' }, 'Priority'),
     cell: ({ row }) => {
       const priority = row.getValue('priority')
-      return h('div', { class: 'text-center' }, h(PriorityBadges, { priority }));
+      return h('div', { class: 'text-center' }, h(PriorityBadges, { priority }))
+    },
+    filterFn: (row, columnId, filterValues) => {
+      if (filterValues == null || filterValues.length == 0) return true;
+      return filterValues.includes(row.getValue(columnId))
     },
   },
   {
@@ -65,9 +69,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     header: () => h('div', { class: 'text-center' }, 'Personnel'),
     cell: ({ row }) => {
       const personnel = row.getValue('personnel')
-      return h('div', { class: 'text-center'},
-        h(PersonnelBadges, { personnel })
-      )
+      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel }))
     },
   },
   {
@@ -85,14 +87,17 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     enableHiding: false,
     header: () => h('div', { class: 'text-center' }, 'Actions'),
     cell: ({ row, table }) => {
-      return h('div', { class: 'relative' },
+      return h(
+        'div',
+        { class: 'relative' },
         h(TicketQuickActions, {
           ticket: row.original,
           onUpdated: () => {
             table.options.meta?.requestRefresh?.()
-            table.options.meta?.emitRowAction?.({ type: 'updated', row: row.original})
-          }
-        }))
+            table.options.meta?.emitRowAction?.({ type: 'updated', row: row.original })
+          },
+        }),
+      )
     },
   },
 ]
