@@ -6,6 +6,7 @@ import TicketQuickActions from '@/components/tickets/ticket-quick-actions.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
 import PersonnelBadges from '@/components/tickets/composable/personnel-badges.vue'
+import { mapStatus } from '@/scripts/utils.ts'
 
 export const ticket_columns: ColumnDef<Ticket>[] = [
   {
@@ -90,6 +91,14 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     accessorKey: 'office',
     header: () => h('div', { class: 'text-center' }, 'Office'),
     cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('office')),
+  },
+  {
+    accessorKey: 'status',
+    header: () => h('div', { class: 'text-center' }, 'Status'),
+    cell: ({ row }) => {
+      const status = mapStatus(row.getValue('status'))
+      return h('div', { class: 'text-center'}, status.name)
+    },
   },
   {
     id: 'actions',

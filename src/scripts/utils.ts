@@ -1,5 +1,4 @@
-import { Priorities, RequestType, type Ticket } from '@/types/types.ts'
-import { rankItem } from '@tanstack/match-sorter-utils'
+import { type MappedStatus, Priorities, RequestType, Status, type Ticket } from '@/types/types.ts'
 
 export function priorityToString(k: number): string {
   switch (k) {
@@ -48,9 +47,20 @@ export function requestTypeToString(k: number): string {
   }
 }
 
+// might be deprecated
 export function invertRequestType(value: RequestType): RequestType {
   const index = Object.values(RequestType).indexOf(value)
   return index as RequestType
+}
+
+
+// -- Formatting and Mapping to types and other stuff --
+
+export function mapStatus(statusCode: number): MappedStatus {
+  return {
+    code: statusCode,
+    name: Status[statusCode],
+  } as MappedStatus
 }
 
 function formatTickets(tickets: object) {

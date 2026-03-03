@@ -21,7 +21,6 @@ onMounted(async () => {
     :columns="ticket_columns"
     :data="data"
     @refresh="refetch"
-    class="w-full"
   />
 </template>
 

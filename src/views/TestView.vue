@@ -3,9 +3,7 @@ import Dashtest from '@/components/Dashtest.vue'
 </script>
 
 <template>
-  <div class="w-full">
-    <Dashtest class="w-full border-dashed border-2" />
-  </div>
+    <Dashtest class="w-full" />
 </template>
 
 <style scoped>

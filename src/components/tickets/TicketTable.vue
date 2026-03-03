@@ -98,7 +98,7 @@ const table = useVueTable({
       <DateFilter
       />
     </div>
-    <Table class="w-full min-w-24!">
+    <Table class="w-full">
       <TableHeader>
         <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
           <TableHead v-for="header in headerGroup.headers" :key="header.id">

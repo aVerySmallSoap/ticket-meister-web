@@ -1,13 +1,14 @@
 export interface Ticket {
-    email: string,
-    name: string,
-    office: string,
-    details: string | null,
-    priority: number,
-    request_type: RequestType,
-    date: string,
-    id: string,
-    personnel: string | null
+  email: string,
+  name: string,
+  office: string,
+  details: string | null,
+  priority: number,
+  request_type: RequestType,
+  date: string,
+  id: string,
+  personnel: string | null,
+  status: number,
 }
 
 export interface Personnel {
@@ -27,6 +28,19 @@ export enum RequestType {
   "Request for System Services",
   "Others",
   "Equipment Repair Report"
+}
+
+export enum Status {
+  "Pending",
+  "IN Progress",
+  "Completed",
+  "Failed",
+  "No Fix"
+}
+
+export interface MappedStatus {
+  code: number
+  name: Status
 }
 
 export enum Priorities {
