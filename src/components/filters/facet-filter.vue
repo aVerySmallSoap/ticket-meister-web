@@ -57,7 +57,7 @@ watch(
   <Popover>
     <PopoverTrigger as-child>
       <Button variant="outline" class="border-dashed">
-        Priority
+        <slot/>
         <PlusIcon />
         <template v-if="selected.length">
           <Separator orientation="vertical" class="h-4" />

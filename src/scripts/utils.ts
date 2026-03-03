@@ -1,4 +1,5 @@
 import { Priorities, RequestType, type Ticket } from '@/types/types.ts'
+import { rankItem } from '@tanstack/match-sorter-utils'
 
 export function priorityToString(k: number): string {
   switch (k) {

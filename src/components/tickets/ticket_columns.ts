@@ -51,6 +51,10 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     accessorKey: 'request_type',
     header: () => h('div', { class: 'text-center' }, 'Request Type'),
     cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('request_type')),
+    filterFn: (row, columnId, filterValues) => {
+      if (filterValues == null || filterValues.length == 0) return true;
+      return filterValues.includes(row.getValue(columnId))
+    },
   },
   {
     accessorKey: 'priority',
@@ -80,7 +84,12 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
   {
     accessorKey: 'email',
     header: () => h('div', { class: 'text-center' }, 'Email'),
-    cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('email')),
+    cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('email')),
+  },
+  {
+    accessorKey: 'office',
+    header: () => h('div', { class: 'text-center' }, 'Office'),
+    cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('office')),
   },
   {
     id: 'actions',

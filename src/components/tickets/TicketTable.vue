@@ -2,13 +2,13 @@
 import {
   type ColumnDef,
   FlexRender,
-  ColumnFiltersState,
   getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   useVueTable,
+  type ColumnFiltersState,
 } from '@tanstack/vue-table'
 import {
   Table,
@@ -22,7 +22,8 @@ import { ref } from 'vue'
 import { valueUpdater } from '@/components/ui/table/utils.ts'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import TestFacet from '@/components/filters/test-facet.vue'
+import FacetFilter from '@/components/filters/facet-filter.vue'
+import DateFilter from "@/components/filters/date-filter.vue";
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
@@ -36,6 +37,7 @@ const emit = defineEmits<{
 
 const rowSelection = ref({})
 const columnFilters = ref<ColumnFiltersState>([])
+const globalFilter = ref()
 
 const table = useVueTable({
   get data() {
@@ -51,6 +53,7 @@ const table = useVueTable({
   getFacetedUniqueValues: getFacetedUniqueValues(),
   onColumnFiltersChange: (updaterOrValue) => valueUpdater(updaterOrValue, columnFilters),
   onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
+  globalFilterFn: 'includesString',
   state: {
     get rowSelection() {
       return rowSelection.value
@@ -58,29 +61,44 @@ const table = useVueTable({
     get columnFilters() {
       return columnFilters.value
     },
+    get globalFilter() {
+      return globalFilter.value
+    },
   },
   meta: {
     emitRowAction: (payload: { type: string; row: TData }) => emit('row-action', payload),
     requestRefresh: () => emit('refresh'),
   },
+  onGlobalFilterChange: (updater) => {
+    globalFilter.value = typeof updater === 'function' ? updater(globalFilter.value) : updater;
+  },
 })
 </script>
 
 <template>
-  <div class="min-w-full max-w-full">
+  <div class="min-w-full w-full">
     <div class="flex items-center py-4 gap-2">
       <Input
         class="max-w-sm"
-        placeholder="Filter emails..."
-        :model-value="table.getColumn('email')?.getFilterValue() as string"
-        @update:model-value="table.getColumn('email')?.setFilterValue($event)"
+        placeholder="Search..."
+        @update:model-value="(e) => table.setGlobalFilter(String(e))"
       />
-      <TestFacet
+      <FacetFilter
         :model-value="table.getColumn('priority')?._getFacetedUniqueValues()"
         @update:model-value="table.getColumn('priority')?.setFilterValue($event)"
+      >
+        Priority
+      </FacetFilter>
+      <FacetFilter
+        :model-value="table.getColumn('request_type')?._getFacetedUniqueValues()"
+        @update:model-value="table.getColumn('request_type')?.setFilterValue($event)"
+      >
+        Request Type
+      </FacetFilter>
+      <DateFilter
       />
     </div>
-    <Table class="min-w-24!">
+    <Table class="w-full min-w-24!">
       <TableHeader>
         <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
           <TableHead v-for="header in headerGroup.headers" :key="header.id">
@@ -106,7 +124,7 @@ const table = useVueTable({
         </template>
         <template v-else>
           <TableRow>
-            <TableCell :aria-colspan="columns.length" class="h-24 text-center">
+            <TableCell :colspan="columns.length" class="h-24 text-center">
               No results.
             </TableCell>
           </TableRow>

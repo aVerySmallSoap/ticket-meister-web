@@ -6,7 +6,7 @@ import 'vue-sonner/style.css';
 
 <template>
   <Toaster :position="'top-right'" :duration="2000" rich-colors />
-  <RouterView />
+  <RouterView class="w-full min-w-full"/>
 </template>
 
 <style scoped>
