@@ -5,14 +5,16 @@ import type { Personnel } from '@/types/types.ts'
 export const usePersonnelStore = defineStore('personnelist', {
   state: () => ({
     list: [] as Personnel[],
-    isLoading: false,
+    isLoading: true,
   }),
   getters: {
     personnel: (state) => {
-      return state.list.map((p) => ({
-        id: p.id,
-        obj: p
-      }))
+      const map = new Map()
+      state.list.map( (p) => {
+        map.set(p.id, p)
+        }
+      )
+      return map
     }
   },
   actions: {
@@ -23,11 +25,13 @@ export const usePersonnelStore = defineStore('personnelist', {
       this.isLoading = false
     },
     getList(arr: string[]){
-      let list: Personnel[] = []
+      const list: Personnel[] = []
       const personnel = this.personnel
-      for (const technician in arr){
-
+      for (const technician of arr){
+        if (technician == undefined || technician == 'None' || technician == null) continue;
+        if (personnel.has(technician)) list.push(personnel.get(technician))
       }
+      return list
     }
   }
 })

@@ -7,7 +7,7 @@ export interface Ticket {
   request_type: RequestType,
   date: string,
   id: string,
-  personnel: string | null,
+  personnel: string | string[] | Personnel[],
   status: number,
 }
 

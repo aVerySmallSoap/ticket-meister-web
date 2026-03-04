@@ -85,22 +85,22 @@ const table = useVueTable({
         @update:model-value="(e) => table.setGlobalFilter(String(e))"
       />
       <FacetFilter
-        :model-value="table.getColumn('priority')?._getFacetedUniqueValues()"
+        :model-value="table.getColumn('priority')?.getFacetedUniqueValues()"
         @update:model-value="table.getColumn('priority')?.setFilterValue($event)"
       >
         Priority
       </FacetFilter>
       <FacetFilter
-        :model-value="table.getColumn('request_type')?._getFacetedUniqueValues()"
+        :model-value="table.getColumn('request_type')?.getFacetedUniqueValues()"
         @update:model-value="table.getColumn('request_type')?.setFilterValue($event)"
       >
         Request Type
       </FacetFilter>
-      <DateFilter/>
       <PersonnelFilter
-        :model-value="table.getColumn('personnel')?._getFacetedUniqueValues()"
+        :model-value="table.getColumn('personnel')?.getFacetedUniqueValues()"
         @update:model-value="table.getColumn('personnel')?.setFilterValue($event)"
       />
+      <DateFilter/>
     </div>
     <Table class="w-full">
       <TableHeader>

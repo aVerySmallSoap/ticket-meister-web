@@ -6,8 +6,9 @@ import TicketQuickActions from '@/components/tickets/ticket-quick-actions.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
 import PersonnelBadges from '@/components/tickets/composable/personnel-badges.vue'
-import { mapStatus } from '@/scripts/utils.ts'
+import { mapStatus, personnelToArray } from '@/scripts/utils.ts'
 import {usePersonnelStore} from "@/stores/personnel.ts";
+
 
 export const ticket_columns: ColumnDef<Ticket>[] = [
   {
@@ -74,11 +75,24 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     accessorKey: 'personnel',
     header: () => h('div', { class: 'text-center' }, 'Personnel'),
     cell: ({ row }) => {
-      const listOfPersonnel = row.getValue('personnel')
-      const testStore = usePersonnelStore()
-      console.log(testStore.getList(listOfPersonnel))
-      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: [] }))
+      const listOfPersonnel = personnelToArray(row.getValue('personnel'))
+      const personnelStore = usePersonnelStore()
+      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: personnelStore.getList(listOfPersonnel) }))
     },
+    getUniqueValues: (ticket, row) => {
+      if (ticket.personnel == null) return []
+      let personnel: string[] | Personnel[];
+      if (typeof ticket.personnel === 'string') {
+        personnel = personnelToArray(ticket.personnel)
+      }else{
+        // we can assume that personnel is of type Personnel[] or string[]
+        return ticket.personnel
+      }
+      const personnelStore = usePersonnelStore()
+      const list = []
+      for (const technician of personnelStore.getList(personnel)) list.push(technician.name)
+      return list
+    }
   },
   {
     accessorKey: 'name',

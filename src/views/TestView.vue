@@ -3,7 +3,7 @@ import Dashtest from '@/components/Dashtest.vue'
 </script>
 
 <template>
-    <Dashtest class="w-full" />
+    <Dashtest/>
 </template>
 
 <style scoped>

@@ -10,7 +10,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 
@@ -51,6 +51,10 @@ watch(
     tags.value = newVal
   },
 )
+
+onMounted(() => {
+  tags.value = props.modelValue
+})
 </script>
 
 <template>

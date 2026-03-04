@@ -4,8 +4,7 @@ import { onMounted, ref, watch } from 'vue'
 import type { Personnel } from '@/types/types.ts'
 
 const props = defineProps<{
-  // personnel: Promise<Personnel[]>
-  personnel: any
+  personnel: Personnel[]
 }>()
 
 // Always initialize as an array so v-for can render immediately (even if empty)
