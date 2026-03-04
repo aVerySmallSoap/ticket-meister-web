@@ -1,5 +1,5 @@
 import { h } from 'vue';
-import type { Ticket } from '@/types/types.ts'
+import type { Personnel, Ticket } from '@/types/types.ts'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { toast } from 'vue-sonner'
 import TicketQuickActions from '@/components/tickets/ticket-quick-actions.vue'
@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
 import PersonnelBadges from '@/components/tickets/composable/personnel-badges.vue'
 import { mapStatus } from '@/scripts/utils.ts'
+import {usePersonnelStore} from "@/stores/personnel.ts";
 
 export const ticket_columns: ColumnDef<Ticket>[] = [
   {
@@ -73,8 +74,10 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     accessorKey: 'personnel',
     header: () => h('div', { class: 'text-center' }, 'Personnel'),
     cell: ({ row }) => {
-      const personnel = row.getValue('personnel')
-      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel }))
+      const listOfPersonnel = row.getValue('personnel')
+      const testStore = usePersonnelStore()
+      console.log(testStore.getList(listOfPersonnel))
+      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: [] }))
     },
   },
   {

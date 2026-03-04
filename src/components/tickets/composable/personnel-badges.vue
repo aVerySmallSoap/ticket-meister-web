@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge'
 import { onMounted, ref, watch } from 'vue'
-import { fetchPersonnelList } from '@/scripts/api.ts'
-
-type Technician = {
-  id: string
-  name: string
-}
+import type { Personnel } from '@/types/types.ts'
 
 const props = defineProps<{
-  personnel: string
+  // personnel: Promise<Personnel[]>
+  personnel: any
 }>()
 
 // Always initialize as an array so v-for can render immediately (even if empty)
-const personnelList = ref<Technician[]>([])
+const personnelList = ref<Personnel[]>([])
 
 async function load() {
-  personnelList.value = await fetchPersonnelList(props.personnel)
+  personnelList.value = await props.personnel
 }
 
 onMounted(load)

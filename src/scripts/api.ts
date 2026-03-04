@@ -1,16 +1,16 @@
 // This file should contain functions related to API calls on the backend
 
-import type { Ticket } from '@/types/types.ts'
+import type { Personnel, Ticket } from '@/types/types.ts'
 import { invertRequestType, personnelToArray, stringifyPersonnel } from '@/scripts/utils.ts'
 import { toast } from 'vue-sonner'
-import { PersonnelList } from '@/types/types.ts'
+import { type PersonnelList } from '@/types/types.ts'
 
 export async function fetchPersonnel() {
   const response = await fetch(`http://localhost:8000/personnel/?offset=0&limit=100`)
-  return await response.json()
+  return await response.json() as Personnel[]
 }
 
-export async function fetchPersonnelList(list: string){
+export async function fetchPersonnelList(list: string): Promise<Personnel[]> {
   if (!(list == null || list.length == 0 || list == 'None')){
     const personnel: PersonnelList = {
       ids: personnelToArray(list),
@@ -22,7 +22,8 @@ export async function fetchPersonnelList(list: string){
         "Content-Type": 'application/json',
       },
     })
-    return await test.json()
+    const temp = await test.json()
+    return temp as Personnel[]
   }
   return []
 }

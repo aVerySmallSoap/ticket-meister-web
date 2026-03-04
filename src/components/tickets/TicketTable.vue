@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import FacetFilter from '@/components/filters/facet-filter.vue'
 import DateFilter from "@/components/filters/date-filter.vue";
+import PersonnelFilter from "@/components/filters/personnel-filter.vue";
 
 const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
@@ -95,7 +96,10 @@ const table = useVueTable({
       >
         Request Type
       </FacetFilter>
-      <DateFilter
+      <DateFilter/>
+      <PersonnelFilter
+        :model-value="table.getColumn('personnel')?._getFacetedUniqueValues()"
+        @update:model-value="table.getColumn('personnel')?.setFilterValue($event)"
       />
     </div>
     <Table class="w-full">

@@ -16,7 +16,7 @@ export interface Personnel {
   name: string,
 }
 
-export class PersonnelList {
+export interface PersonnelList {
   ids: string[]
 }
 
@@ -40,7 +40,7 @@ export enum Status {
 
 export interface MappedStatus {
   code: number
-  name: Status
+  name: string
 }
 
 export enum Priorities {
