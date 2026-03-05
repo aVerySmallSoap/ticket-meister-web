@@ -47,7 +47,7 @@ const formSchema = z.object({
 const form = useForm({
   defaultValues: {
     priority: invertPriorityFromString(props.ticket.priority),
-    personnel: personnelToArray(props.ticket.personnel),
+    personnel: props.ticket.personnel,
   },
   validators: {
     onSubmit: formSchema,

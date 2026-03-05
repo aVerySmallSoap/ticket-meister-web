@@ -75,11 +75,20 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     accessorKey: 'personnel',
     header: () => h('div', { class: 'text-center' }, 'Personnel'),
     cell: ({ row }) => {
-      const listOfPersonnel = personnelToArray(row.getValue('personnel'))
-      const personnelStore = usePersonnelStore()
-      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: personnelStore.getList(listOfPersonnel) }))
+      const listOfPersonnel = row.getValue('personnel')
+      return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: listOfPersonnel }))
     },
-    getUniqueValues: (ticket, row) => {
+    filterFn: (row, columnId, filterValues) => {
+      if (filterValues == null || filterValues.length == 0) return true;
+      // we can assume that row.getValue(columnId) returns an Array<string>
+      for (const term of filterValues) {
+        if (row.getValue(columnId).indexOf(term) != -1){
+          return true
+        }
+      }
+      return filterValues.includes(row.getValue(columnId))
+    },
+    getUniqueValues: (ticket) => {
       if (ticket.personnel == null) return []
       let personnel: string[] | Personnel[];
       if (typeof ticket.personnel === 'string') {

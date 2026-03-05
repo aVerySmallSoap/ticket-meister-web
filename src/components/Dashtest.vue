@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ticket_columns } from '@/components/tickets/ticket_columns.ts'
-import { type Ticket } from '@/types/types.ts'
+import { type Personnel, type Ticket } from '@/types/types.ts'
 import TicketTable from '@/components/tickets/TicketTable.vue'
-import { fetchTickets, personnelToArray } from '@/scripts/utils.ts';
+import { fetchTickets, personnelToArray } from '@/scripts/utils.ts'
 import { onMounted, ref } from 'vue'
 import { usePersonnelStore } from '@/stores/personnel.ts'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -12,34 +12,49 @@ import { Skeleton } from '@/components/ui/skeleton'
 const personnelStore = usePersonnelStore()
 const data = ref<Ticket[]>([])
 
-async function refetch(){
+async function refetch() {
   data.value = await fetchTickets()
 }
 
+//TODO: Tickets should not resolve to personnel name?
+function resolve(ticket: Ticket): string[] {
+  const temp: string[] = []
+  let arr: Personnel[];
+  if (typeof ticket.personnel == 'string') {
+    arr = personnelStore.getList(personnelToArray(ticket.personnel))
+  } else {
+    arr = personnelStore.getList(ticket.personnel)
+  }
+  arr.forEach((item: Personnel) => temp.push(item.name))
+  return temp
+}
+
+//TODO: change if DB supports arrays, if so, Tickets.personnel is always of type string[]
 function morph(tickets: Ticket[]): Ticket[] {
   if (tickets.length == 0) return []
-  if (typeof tickets[0].personnel === 'string'){
-    return tickets.map((ticket: Ticket) => ({
+  let test: Ticket[] = []
+  if (typeof tickets[0].personnel === 'string') {
+    test = tickets.map((ticket: Ticket) => ({
       ...ticket,
-      personnel: personnelStore.getList(personnelToArray(ticket.personnel))
+      personnel: resolve(ticket),
     }))
   }
-  if (typeof tickets.pop()?.personnel === typeof Array<string> ){
-    return tickets.map((ticket: Ticket) => ({
+  if (typeof tickets.pop()?.personnel === typeof Array<string>) {
+    test = tickets.map((ticket: Ticket) => ({
       ...ticket,
-      personnel: personnelStore.getList(ticket.personnel)
+      personnel: resolve(ticket),
     }))
   }
-  return tickets
+  return test
 }
 
 onMounted(async () => {
   const res = await fetchTickets()
-  data.value = res
-  if (personnelStore.list.length == 0){
+  // data.value = res
+  if (personnelStore.list.length == 0) {
     await personnelStore.getPersonnel()
   }
-  morph(res)
+  data.value = morph(res)
 })
 </script>
 
@@ -48,11 +63,7 @@ onMounted(async () => {
     <Skeleton />
   </template>
   <template v-else>
-    <TicketTable
-      :columns="ticket_columns"
-      :data="data"
-      @refresh="refetch"
-    />
+    <TicketTable :columns="ticket_columns" :data="data" @refresh="refetch" />
   </template>
 </template>
 

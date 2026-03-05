@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge'
 import { onMounted, ref, watch } from 'vue'
-import type { Personnel } from '@/types/types.ts'
 
 const props = defineProps<{
-  personnel: Personnel[]
+  personnel: string[]
 }>()
 
 // Always initialize as an array so v-for can render immediately (even if empty)
-const personnelList = ref<Personnel[]>([])
+const personnelList = ref<string[]>([])
 
 async function load() {
-  personnelList.value = await props.personnel
+  personnelList.value = props.personnel
 }
 
 onMounted(load)
@@ -25,10 +24,10 @@ watch(() => props.personnel, load)
     <template v-if="personnelList.length">
       <Badge
         v-for="technician in personnelList"
-        :key="technician.id"
+        :key="technician"
         variant="secondary"
       >
-        {{ technician.name }}
+        {{ technician }}
       </Badge>
     </template>
 
