@@ -38,6 +38,7 @@ export async function applyTicketEdits(ticket: Ticket, changes: any){
   copy.priority = changes.priority
   copy.request_type = invertRequestType(copy.request_type)
   copy.personnel = stringifyPersonnel(changes.personnel)
+  copy.status = changes.status
   fetch(`http://localhost:8000/tickets/${copy.id}`, {
     method: 'PUT',
     body: JSON.stringify(copy),

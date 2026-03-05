@@ -32,6 +32,66 @@ export const usePersonnelStore = defineStore('personnelist', {
         if (personnel.has(technician)) list.push(personnel.get(technician))
       }
       return list
+    },
+    getFromMap(map: Map<string, Personnel>){
+      const list: Personnel[] = []
+      map.forEach((technician) => {
+        list.push(technician)
+      })
+      return list
+    },
+    getMap(arr: string[]): Map<string, Personnel>{
+      // This function should take in the name of personnel and reverse map it to their Personnel Type
+      const map: Map<string, Personnel> = new Map()
+      const personnel = this.list
+      for (const technician of arr){
+        personnel.forEach((personnel: Personnel) => {
+          if (personnel.name == technician) {
+            map.set(personnel.id, personnel)
+          }
+        })
+      }
+      return map
+    },
+    getInverseMap(arr: string[]): Map<string, Personnel>{
+      const map: Map<string, Personnel> = new Map()
+      const personnel = this.list
+      for (const technician of arr) {
+        personnel.forEach((personnel: Personnel) => {
+          if (personnel.name == technician) {
+            map.set(technician, personnel)
+          }
+        })
+      }
+      return map
+    },
+    getNames(list: string[]): string[]{
+      // Get the names from a list of IDs
+      if (list.length == 0) return []
+      const personnel = this.list
+      const returnable: string[] = []
+      for (const id of list){
+        personnel.forEach((personnel: Personnel) => {
+          if(personnel.id == id){
+            returnable.push(personnel.name)
+          }
+        })
+      }
+      return returnable
+    },
+    getIDs(list: string[]): string[]{
+      // Get the IDs from a list of names
+      if (list.length == 0) return []
+      const personnel = this.list
+      const returnable: string[] = []
+      for (const name of list) {
+        personnel.forEach((personnel: Personnel) => {
+          if (personnel.name == name) {
+            returnable.push(personnel.id)
+          }
+        })
+      }
+      return returnable
     }
   }
 })

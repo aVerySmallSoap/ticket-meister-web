@@ -13,7 +13,8 @@ const personnelStore = usePersonnelStore()
 const data = ref<Ticket[]>([])
 
 async function refetch() {
-  data.value = await fetchTickets()
+  const res = await fetchTickets()
+  data.value = morph(res)
 }
 
 //TODO: Tickets should not resolve to personnel name?
@@ -50,7 +51,6 @@ function morph(tickets: Ticket[]): Ticket[] {
 
 onMounted(async () => {
   const res = await fetchTickets()
-  // data.value = res
   if (personnelStore.list.length == 0) {
     await personnelStore.getPersonnel()
   }

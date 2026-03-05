@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { Priorities, type Ticket } from '@/types/types.ts'
+import { Priorities, Status, type Ticket } from '@/types/types.ts'
 import { Label } from '@/components/ui/label'
 import z from 'zod'
 import { useForm } from '@tanstack/vue-form'
@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ref } from 'vue'
-import { invertPriorityFromString, personnelToArray } from '@/scripts/utils.ts'
+import { invertPriorityFromString } from '@/scripts/utils.ts'
 import PersonnelFilterDemo from '@/components/personnel/PersonnelFilterDemo.vue'
 import { Button } from '@/components/ui/button'
 
@@ -39,15 +39,24 @@ const priorityTypeOptions = Object.values(Priorities)
     value,
   }))
 
+const statusOptions = Object.values(Status)
+  .filter((v): v is number => typeof v === 'number')
+  .map((value) => ({
+    label: Status[value],
+    value,
+  }))
+
 const formSchema = z.object({
   priority: z.number(),
   personnel: z.array(z.uuidv4()),
+  status: z.number(),
 })
 
 const form = useForm({
   defaultValues: {
     priority: invertPriorityFromString(props.ticket.priority),
     personnel: props.ticket.personnel,
+    status: props.ticket.status,
   },
   validators: {
     onSubmit: formSchema,
@@ -109,6 +118,35 @@ function isInvalid(field: any) {
                       :value="type.value"
                     >
                       {{ type.label }}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+            </template>
+          </form.Field>
+
+          <form.Field name="status">
+            <template #default="{ field }">
+              <Field :data-invalid="isInvalid(field)">
+                <FieldContent>
+                  <FieldLabel :for="field.name"> Status </FieldLabel>
+                  <FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
+                </FieldContent>
+                <Select
+                  :name="field.name"
+                  :model-value="field.state.value"
+                  @update:model-value="field.handleChange"
+                >
+                  <SelectTrigger>
+                    <SelectValue/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem
+                      v-for="option in statusOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
                     </SelectItem>
                   </SelectContent>
                 </Select>

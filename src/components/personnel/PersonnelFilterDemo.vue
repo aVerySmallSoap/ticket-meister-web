@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/command'
 import { type Personnel } from '@/types/types.ts'
 import { fetchPersonnel } from '@/scripts/api.ts'
+import { usePersonnelStore } from '@/stores/personnel.ts'
 
 const props = defineProps<{
   modelValue?: string[]
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 const personnelList = ref<Personnel[]>([])
 
 const selected = ref<Personnel[]>([])
-const selectedIDs = computed(() => selected.value.map(p => String(p.id)))
+const selectedIDs = computed(() => selected.value.map((p) => String(p.id)))
 
 watch(selectedIDs, (ids) => {
   emit('update:modelValue', ids)
@@ -55,9 +56,10 @@ function clearAll() {
 }
 
 onMounted(async () => {
-  personnelList.value = await fetchPersonnel()
-  const ids = props.modelValue ?? []
-  selected.value = personnelList.value.filter(p => ids.includes(p.id))
+  const personnelStore = usePersonnelStore()
+  personnelList.value = personnelStore.getFromMap(personnelStore.getMap(props.modelValue))
+  const ids = personnelStore.getIDs(props.modelValue) ?? []
+  selected.value = personnelList.value.filter((p) => ids.includes(p.id))
 })
 </script>
 
@@ -114,12 +116,12 @@ onMounted(async () => {
                   <div
                     class="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[10px] font-semibold shrink-0"
                   >
-<!--                    {{ person.avatar }}-->
+                    <!--                    {{ person.avatar }}-->
                   </div>
                   <!-- Info -->
                   <div class="flex flex-col">
                     <span class="text-sm font-medium">{{ person.name }}</span>
-<!--                    <span class="text-xs text-muted-foreground">{{ person.role }}</span>-->
+                    <!--                    <span class="text-xs text-muted-foreground">{{ person.role }}</span>-->
                   </div>
                 </div>
               </CommandItem>

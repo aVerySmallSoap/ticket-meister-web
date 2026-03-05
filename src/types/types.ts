@@ -32,7 +32,7 @@ export enum RequestType {
 
 export enum Status {
   "Pending",
-  "IN Progress",
+  "In Progress",
   "Completed",
   "Failed",
   "No Fix"

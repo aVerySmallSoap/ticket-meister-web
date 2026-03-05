@@ -8,6 +8,7 @@ import PriorityBadges from '@/components/tickets/composable/priority-badges.vue'
 import PersonnelBadges from '@/components/tickets/composable/personnel-badges.vue'
 import { mapStatus, personnelToArray } from '@/scripts/utils.ts'
 import {usePersonnelStore} from "@/stores/personnel.ts";
+import StatusBadges from '@/components/tickets/composable/status-badges.vue'
 
 
 export const ticket_columns: ColumnDef<Ticket>[] = [
@@ -123,7 +124,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     header: () => h('div', { class: 'text-center' }, 'Status'),
     cell: ({ row }) => {
       const status = mapStatus(row.getValue('status'))
-      return h('div', { class: 'text-center'}, status.name)
+      return h('div', { class: 'text-center'}, h(StatusBadges, { status: status}))
     },
   },
   {
