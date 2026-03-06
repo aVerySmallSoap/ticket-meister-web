@@ -31,7 +31,6 @@ async function onSave(n: any) {
     <Button variant="outline" size="icon-sm" @click="copy">
       <CopyIcon />
     </Button>
-
     <TicketEditCard :ticket="ticket" @save="onSave">
       <Button variant="outline" size="icon-sm">
         <SquarePenIcon />

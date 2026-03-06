@@ -30,12 +30,10 @@ const props = defineProps<{
   ticket: Ticket
 }>()
 
-const priorityTypeLabels = ['None', 'Low', 'Medium', 'High', 'Highest']
-
 const priorityTypeOptions = Object.values(Priorities)
   .filter((v): v is number => typeof v === 'number')
   .map((value) => ({
-    label: priorityTypeLabels[value],
+    label: Priorities[value],
     value,
   }))
 

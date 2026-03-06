@@ -8,14 +8,15 @@ export const usePersonnelStore = defineStore('personnelist', {
     isLoading: true,
   }),
   getters: {
-    personnel: (state) => {
+    personnelAsMap: (state) => {
       const map = new Map()
       state.list.map( (p) => {
         map.set(p.id, p)
         }
       )
       return map
-    }
+    },
+    personnel: (state) => state.list,
   },
   actions: {
     async getPersonnel(){
@@ -26,7 +27,7 @@ export const usePersonnelStore = defineStore('personnelist', {
     },
     getList(arr: string[]){
       const list: Personnel[] = []
-      const personnel = this.personnel
+      const personnel = this.personnelAsMap
       for (const technician of arr){
         if (technician == undefined || technician == 'None' || technician == null) continue;
         if (personnel.has(technician)) list.push(personnel.get(technician))

@@ -23,7 +23,7 @@ export function invertPriorityFromString(priority: string): number {
       return 2
     case 'high':
       return 3
-    case 'highest':
+    case 'urgent':
       return 4
     default:
       return 0

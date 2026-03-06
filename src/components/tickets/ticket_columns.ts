@@ -56,7 +56,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     header: () => h('div', { class: 'text-center' }, 'Request Type'),
     cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('request_type')),
     filterFn: (row, columnId, filterValues) => {
-      if (filterValues == null || filterValues.length == 0) return true;
+      if (filterValues == null || filterValues.length == 0) return true
       return filterValues.includes(row.getValue(columnId))
     },
   },
@@ -68,7 +68,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
       return h('div', { class: 'text-center' }, h(PriorityBadges, { priority }))
     },
     filterFn: (row, columnId, filterValues) => {
-      if (filterValues == null || filterValues.length == 0) return true;
+      if (filterValues == null || filterValues.length == 0) return true
       return filterValues.includes(row.getValue(columnId))
     },
   },
@@ -80,10 +80,10 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
       return h('div', { class: 'text-center' }, h(PersonnelBadges, { personnel: listOfPersonnel }))
     },
     filterFn: (row, columnId, filterValues) => {
-      if (filterValues == null || filterValues.length == 0) return true;
+      if (filterValues == null || filterValues.length == 0) return true
       // we can assume that row.getValue(columnId) returns an Array<string>
       for (const term of filterValues) {
-        if (row.getValue(columnId).indexOf(term) != -1){
+        if (row.getValue(columnId).indexOf(term) != -1) {
           return true
         }
       }
@@ -91,10 +91,10 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     },
     getUniqueValues: (ticket) => {
       if (ticket.personnel == null) return []
-      let personnel: string[] | Personnel[];
+      let personnel: string[] | Personnel[]
       if (typeof ticket.personnel === 'string') {
         personnel = personnelToArray(ticket.personnel)
-      }else{
+      } else {
         // we can assume that personnel is of type Personnel[] or string[]
         return ticket.personnel
       }
@@ -102,7 +102,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
       const list = []
       for (const technician of personnelStore.getList(personnel)) list.push(technician.name)
       return list
-    }
+    },
   },
   {
     accessorKey: 'name',
@@ -110,21 +110,21 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
     cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('name')),
   },
   {
+    accessorKey: 'office',
+    header: () => h('div', { class: 'text-center' }, 'Office'),
+    cell: ({ row }) => h('div', { class: 'text-center' }, row.getValue('office')),
+  },
+  {
     accessorKey: 'email',
     header: () => h('div', { class: 'text-center' }, 'Email'),
     cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('email')),
-  },
-  {
-    accessorKey: 'office',
-    header: () => h('div', { class: 'text-center' }, 'Office'),
-    cell: ({ row }) => h('div', { class: 'text-left' }, row.getValue('office')),
   },
   {
     accessorKey: 'status',
     header: () => h('div', { class: 'text-center' }, 'Status'),
     cell: ({ row }) => {
       const status = mapStatus(row.getValue('status'))
-      return h('div', { class: 'text-center'}, h(StatusBadges, { status: status}))
+      return h('div', { class: 'text-center' }, h(StatusBadges, { status: status }))
     },
   },
   {

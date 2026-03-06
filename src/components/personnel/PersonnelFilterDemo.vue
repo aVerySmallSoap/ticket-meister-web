@@ -14,7 +14,6 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { type Personnel } from '@/types/types.ts'
-import { fetchPersonnel } from '@/scripts/api.ts'
 import { usePersonnelStore } from '@/stores/personnel.ts'
 
 const props = defineProps<{
@@ -25,7 +24,6 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string[]): void
 }>()
 
-// make this reactive later
 const personnelList = ref<Personnel[]>([])
 
 const selected = ref<Personnel[]>([])
@@ -57,7 +55,7 @@ function clearAll() {
 
 onMounted(async () => {
   const personnelStore = usePersonnelStore()
-  personnelList.value = personnelStore.getFromMap(personnelStore.getMap(props.modelValue))
+  personnelList.value = personnelStore.personnel
   const ids = personnelStore.getIDs(props.modelValue) ?? []
   selected.value = personnelList.value.filter((p) => ids.includes(p.id))
 })

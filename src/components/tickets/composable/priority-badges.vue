@@ -1,11 +1,4 @@
 <script setup lang="ts">
-// color palette
-// none: FBF4C3 || outline
-// low: FFD914
-// medium: FBA409
-// high: F8750E
-// highest: F03F02
-
 import { Badge } from '@/components/ui/badge'
 import { computed } from 'vue'
 import { Priorities } from '@/types/types.ts'
@@ -21,13 +14,13 @@ const checkVariant = computed(() => {
 const colors = computed(() => {
   switch (Priorities[props.priority]) {
     case 1:
-      return 'bg-[#FFD914]'
+      return 'bg-[#F9C74F]'
     case 2:
-      return 'bg-[#FBA409]'
+      return 'bg-[#F8961E]'
     case 3:
-      return 'bg-[#F8750E]'
+      return 'bg-[#F3722C]'
     case 4:
-      return 'bg-[#F03F02]'
+      return 'bg-[#F94144]'
     default:
       return ''
   }

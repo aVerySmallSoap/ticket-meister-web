@@ -34,8 +34,7 @@ export enum Status {
   "Pending",
   "In Progress",
   "Completed",
-  "Failed",
-  "No Fix"
+  "Closed"
 }
 
 export interface MappedStatus {
@@ -48,5 +47,5 @@ export enum Priorities {
   Low,
   Medium,
   High,
-  Highest
+  Urgent,
 }

@@ -14,13 +14,11 @@ const checkVariant = computed(() => {
 const colors = computed(() => {
   switch (props.status.code) {
     case 1:
-      return 'bg-[#FFD914]'
+      return 'bg-[#577590]'
     case 2:
-      return 'bg-[#FBA409]'
+      return 'bg-[#90BE6D]'
     case 3:
-      return 'bg-[#F8750E]'
-    case 4:
-      return 'bg-[#F03F02]'
+      return 'bg-[#F94144]'
     default:
       return ''
   }
