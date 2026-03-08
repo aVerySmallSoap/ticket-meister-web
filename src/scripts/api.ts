@@ -10,22 +10,10 @@ export async function fetchPersonnel() {
   return await response.json() as Personnel[]
 }
 
-export async function fetchPersonnelList(list: string): Promise<Personnel[]> {
-  if (!(list == null || list.length == 0 || list == 'None')){
-    const personnel: PersonnelList = {
-      ids: personnelToArray(list),
-    }
-    const test = await fetch(`http://localhost:8000/personnel/list`, {
-      method: 'POST',
-      body: JSON.stringify(personnel),
-      headers: {
-        "Content-Type": 'application/json',
-      },
-    })
-    const temp = await test.json()
-    return temp as Personnel[]
-  }
-  return []
+// auth
+
+export async function authenticate(username: string, password: string): Promise<object> {
+
 }
 
 // Calls with POST and PUT methods must accept either an object or any type.

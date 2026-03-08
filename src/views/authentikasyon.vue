@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import Dashtest from '@/components/Dashtest.vue'
+import Login from '@/components/auth/login.vue'
 </script>
 
 <template>
-    <Dashtest/>
+ <login/>
 </template>
 
 <style scoped>
+
 </style>

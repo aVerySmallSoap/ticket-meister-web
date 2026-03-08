@@ -89,7 +89,7 @@ export async function fetchTickets() {
 
 // SQLite specific functions i.e, it doesn't support array like objects
 export function stringifyPersonnel(arr: string[]): string | null {
-  if (arr == null || arr.length == 0) return null
+  if (arr.length == 0) return null
   let stringified = ''
   const length = arr.length
   for (let i = 0; i < length; i++) {
