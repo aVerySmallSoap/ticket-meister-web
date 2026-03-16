@@ -1,4 +1,4 @@
-import { type MappedStatus, Priorities, RequestType, Status, type Ticket } from '@/types/types.ts'
+import { type MappedStatus, type Personnel, Priorities, RequestType, Status, type Ticket } from '@/types/types.ts'
 
 export function priorityToString(k: number): string {
   switch (k) {
@@ -63,7 +63,7 @@ export function mapStatus(statusCode: number): MappedStatus {
   } as MappedStatus
 }
 
-function formatTickets(tickets: object) {
+export function formatTickets(tickets: object) {
   const format_options = {
     year: 'numeric',
     month: 'short',
@@ -81,10 +81,11 @@ function formatTickets(tickets: object) {
   })) as Ticket[]
 }
 
-export async function fetchTickets() {
-  const response = await fetch(`http://localhost:8000/tickets/?offset=0&limit=100`)
-  const tickets = await response.json()
-  return formatTickets(tickets)
+export function formatPersonnel(personnel: object){
+  return (personnel as any[]).map( ({full_name, ...rest}) => ({
+    ...rest,
+    fullName: full_name,
+  }) ) as Personnel[]
 }
 
 // SQLite specific functions i.e, it doesn't support array like objects

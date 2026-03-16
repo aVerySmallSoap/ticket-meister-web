@@ -4,6 +4,8 @@ import { useForm } from '@tanstack/vue-form'
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useAuthStore } from '@/stores/auth.ts'
+import router from '@/router'
 
 const formSchema = z.object({
   username: z.string(),
@@ -12,21 +14,18 @@ const formSchema = z.object({
 
 const form = useForm({
   validators: {
-    onSubmit: formSchema,
-  },
-  onSubmit: async ({ value }) => {
-    const formData = new FormData()
-
-    for (const key in value) {
-      formData.append(key, value[key])
-    }
-
-    fetch('http://localhost:8000/auth', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
+    onSubmitAsync: async ({value}) => {
+      const auth = useAuthStore()
+      try{
+        await auth.login(value["username"], value["password"])
+        console.log(auth.accessToken)
+        await router.push("/dashboard")
+      }catch(error){
+        // throw errors & push them to fields
+        console.log(error)
+      }
+    },
+    onChange: formSchema
   },
 })
 

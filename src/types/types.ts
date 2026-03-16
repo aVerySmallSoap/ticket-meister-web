@@ -13,7 +13,9 @@ export interface Ticket {
 
 export interface Personnel {
   id: string,
-  name: string,
+  fullName: string,
+  email: string,
+  role: number
 }
 
 export interface PersonnelList {

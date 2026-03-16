@@ -100,7 +100,7 @@ export const ticket_columns: ColumnDef<Ticket>[] = [
       }
       const personnelStore = usePersonnelStore()
       const list = []
-      for (const technician of personnelStore.getList(personnel)) list.push(technician.name)
+      for (const technician of personnelStore.getList(personnel)) list.push(technician.fullName)
       return list
     },
   },

@@ -22,6 +22,7 @@ export const usePersonnelStore = defineStore('personnelist', {
     async getPersonnel(){
       this.isLoading = true
       const data = await fetchPersonnel()
+      console.log(data)
       this.list = data as Personnel[]
       this.isLoading = false
     },
@@ -29,8 +30,10 @@ export const usePersonnelStore = defineStore('personnelist', {
       const list: Personnel[] = []
       const personnel = this.personnelAsMap
       for (const technician of arr){
-        if (technician == undefined || technician == 'None' || technician == null) continue;
-        if (personnel.has(technician)) list.push(personnel.get(technician))
+        if (technician == undefined || technician == 'None' || technician == null)
+          continue;
+        if (personnel.has(technician))
+          list.push(personnel.get(technician))
       }
       return list
     },
@@ -47,7 +50,7 @@ export const usePersonnelStore = defineStore('personnelist', {
       const personnel = this.list
       for (const technician of arr){
         personnel.forEach((personnel: Personnel) => {
-          if (personnel.name == technician) {
+          if (personnel.fullName == technician) {
             map.set(personnel.id, personnel)
           }
         })
@@ -59,7 +62,7 @@ export const usePersonnelStore = defineStore('personnelist', {
       const personnel = this.list
       for (const technician of arr) {
         personnel.forEach((personnel: Personnel) => {
-          if (personnel.name == technician) {
+          if (personnel.fullName == technician) {
             map.set(technician, personnel)
           }
         })
@@ -74,7 +77,7 @@ export const usePersonnelStore = defineStore('personnelist', {
       for (const id of list){
         personnel.forEach((personnel: Personnel) => {
           if(personnel.id == id){
-            returnable.push(personnel.name)
+            returnable.push(personnel.fullName)
           }
         })
       }
@@ -87,7 +90,7 @@ export const usePersonnelStore = defineStore('personnelist', {
       const returnable: string[] = []
       for (const name of list) {
         personnel.forEach((personnel: Personnel) => {
-          if (personnel.name == name) {
+          if (personnel.fullName == name) {
             returnable.push(personnel.id)
           }
         })

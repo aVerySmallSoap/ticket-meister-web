@@ -2,10 +2,12 @@
 import { ticket_columns } from '@/components/tickets/ticket_columns.ts'
 import { type Personnel, type Ticket } from '@/types/types.ts'
 import TicketTable from '@/components/tickets/TicketTable.vue'
-import { fetchTickets, personnelToArray } from '@/scripts/utils.ts'
+import { personnelToArray } from '@/scripts/utils.ts'
 import { onMounted, ref } from 'vue'
 import { usePersonnelStore } from '@/stores/personnel.ts'
 import { Skeleton } from '@/components/ui/skeleton'
+import { fetchTickets } from '@/scripts/api.ts'
+import { useAuthStore } from '@/stores/auth.ts'
 
 // TODO: Fetch list of personnel and store them in pinia store to persist in memory. Also load and pass it on a table.
 
@@ -26,7 +28,9 @@ function resolve(ticket: Ticket): string[] {
   } else {
     arr = personnelStore.getList(ticket.personnel)
   }
-  arr.forEach((item: Personnel) => temp.push(item.name))
+  arr.forEach((technician: Personnel) => {
+    temp.push(technician.fullName)
+  })
   return temp
 }
 

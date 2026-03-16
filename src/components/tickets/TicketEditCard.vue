@@ -22,6 +22,7 @@ import { ref } from 'vue'
 import { invertPriorityFromString } from '@/scripts/utils.ts'
 import PersonnelFilterDemo from '@/components/personnel/PersonnelFilterDemo.vue'
 import { Button } from '@/components/ui/button'
+import api from '@/lib/api.ts'
 
 const emit = defineEmits(['save', 'cancel'])
 
@@ -67,6 +68,27 @@ const form = useForm({
 
 function isInvalid(field: any) {
   return field.state.meta.isTouched && !field.state.meta.isValid
+}
+
+async function export_pdf(ticket_id){
+  const res = await api.post('/export/pdf', null, {
+    params: { ticket_id },
+    responseType: 'blob'
+  })
+
+  const blob = new Blob([res.data], { type: 'application/pdf' })
+
+  const url = URL.createObjectURL(blob)
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${ticket_id}.pdf`
+  document.body.appendChild(link)
+
+  link.click()
+
+  link.remove()
+  URL.revokeObjectURL(url)
 }
 </script>
 
@@ -164,6 +186,9 @@ function isInvalid(field: any) {
         </FieldGroup>
         <div class="">
           <Button type="submit">Save</Button>
+        </div>
+        <div>
+          <Button @click.prevent="export_pdf(props.ticket.id)">Export</Button>
         </div>
       </form>
     </DialogContent>

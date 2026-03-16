@@ -1,19 +1,21 @@
 // This file should contain functions related to API calls on the backend
 
 import type { Personnel, Ticket } from '@/types/types.ts'
-import { invertRequestType, personnelToArray, stringifyPersonnel } from '@/scripts/utils.ts'
+import { formatPersonnel, formatTickets, invertRequestType, stringifyPersonnel } from '@/scripts/utils.ts'
 import { toast } from 'vue-sonner'
-import { type PersonnelList } from '@/types/types.ts'
+import api from '@/lib/api.ts'
 
 export async function fetchPersonnel() {
-  const response = await fetch(`http://localhost:8000/personnel/?offset=0&limit=100`)
-  return await response.json() as Personnel[]
+  const response = await api.get('/users/?offset=0&limit=100')
+  const personnel = await response.data
+  return formatPersonnel(personnel)
 }
 
-// auth
 
-export async function authenticate(username: string, password: string): Promise<object> {
-
+export async function fetchTickets() {
+  const response = await api.get('/tickets/?offset=0&limit=100')
+  const tickets = await response.data
+  return formatTickets(tickets)
 }
 
 // Calls with POST and PUT methods must accept either an object or any type.
@@ -27,15 +29,13 @@ export async function applyTicketEdits(ticket: Ticket, changes: any){
   copy.request_type = invertRequestType(copy.request_type)
   copy.personnel = stringifyPersonnel(changes.personnel)
   copy.status = changes.status
-  fetch(`http://localhost:8000/tickets/${copy.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(copy),
+
+  const response = await api.put(`/tickets/${copy.id}`, copy, {
     headers: {
       'Content-Type': 'application/json',
-    },
-  }).then((response) => {
-    if (response.ok) {
-      toast.success('Ticket updated successfully.')
     }
   })
+  if (response.status == 200){
+    toast.success('Ticket updated successfully.')
+  }
 }

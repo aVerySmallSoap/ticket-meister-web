@@ -17,7 +17,7 @@ const router = createRouter({
       component: DashboardView,
     },
     {
-      path: '/auth',
+      path: '/login',
       name: 'authentication',
       component: authentikasyon,
     },

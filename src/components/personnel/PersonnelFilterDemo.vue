@@ -76,7 +76,7 @@ onMounted(async () => {
               variant="secondary"
               class="rounded-sm px-1 font-normal"
             >
-              {{ person.name }}
+              {{ person.fullName }}
             </Badge>
             <Badge
               v-if="selected.length > 2"
@@ -97,7 +97,7 @@ onMounted(async () => {
               <CommandItem
                 v-for="person in personnelList"
                 :key="person.id"
-                :value="person.name"
+                :value="person.fullName"
                 @select="toggle(person)"
               >
                 <div class="flex items-center gap-2 w-full">
@@ -118,7 +118,7 @@ onMounted(async () => {
                   </div>
                   <!-- Info -->
                   <div class="flex flex-col">
-                    <span class="text-sm font-medium">{{ person.name }}</span>
+                    <span class="text-sm font-medium">{{ person.fullName }}</span>
                     <!--                    <span class="text-xs text-muted-foreground">{{ person.role }}</span>-->
                   </div>
                 </div>
@@ -154,7 +154,7 @@ onMounted(async () => {
         >
           {{ person.avatar }}
         </div>
-        {{ person.name }}
+        {{ person.fullName }}
         <button
           class="ml-1 rounded-full hover:bg-muted p-0.5 transition-colors"
           @click="remove(person)"
